@@ -1,42 +1,40 @@
 language: rust
 sudo: false
 
-GH_TOKEN: &GH_TOKEN
-  secure: JcI0OIZf+rz/QT0XwFy29bRvDoAfdhFFtFqOkAjAdCr+Td4UWtvixTwmACTcdZ9i+VqwaMn0FQk9HuGELsRF/ooRKLbgZWmPDn3EYOSuT9VvIeFTIVde1PKQQPNRajSKL9Mp+AXAsdPR+CJs2J/QqhQqm60g31zH04yQLkoIooTsG5SWJ/0Hg5oynIFbdkKkS7T28oU+ar+5OcBUYJTxguwMFKGCBoIfWWmW47dba4JtbVJsJxr3OnPtNjZaNN8BcVVZTz0EoRo5TnHm1k0ntKmS08/tG+xQ+vRAOFcuq2krHBUDnm8/NjoiywEtpDN19fgwuKIeEvi+eY3W1jVz6FHOQmI0x8OjMzNiwZWyjNuPIO3QAuA9jQ2k73JKYt0b0XxCFlkJ9ZQONM2Bbl0U6ceYMsXP66lXB4XjCC1iXBDe6oOMlG5mY849QZ6RjRxb/FO5o6PBc+ALwXwshTJPsQGVPO/CaHgxmUPvniLAAa5SUSCS9PHxpPjuq+jsppxslXZBfXJotYpNSISF/yaFPejmlvDXm6R/SqXS/ISDwPk60vwfUqwERkKjno//JkeyAXiC/H4GNj+b1h0DA6utizlzwR+6r9H0MD1cuBIkOIXC4zS0ss9Vz9NM2YE7toRIyyIJdlH/Jjcjk35Jl6/MaXtBESXvwoOKkjxs1QxiK/A=
-
-DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
-  before_deploy:
-    - git config --local user.name "Domenico Shura"
-    - git config --local user.email "shura1991@gmail.com"
-    - name="spotify-dbus-bridge-$TRAVIS_TAG-$TARGET"
-    - mkdir $name
-    - cp target/$TARGET/release/spotify-dbus-bridge $name/
-    - tar czvf $name.tar.gz $name
-  deploy:
+DEPLOY_TO_GITHUB:
+  before_deploy: &1
+  - git config --local user.name "Domenico Shura"
+  - git config --local user.email "shura1991@gmail.com"
+  - name="spotify-dbus-bridge-$TRAVIS_TAG-$TARGET"
+  - mkdir $name
+  - cp target/$TARGET/release/spotify-dbus-bridge $name/
+  - tar czvf $name.tar.gz $name
+  deploy: &2
     provider: releases
-    api_key: *GH_TOKEN
+    api_key:
+      secure: CSoVERpSmz99qD2tbvBFQq+11Zw6Iznwa36K+Jv+tMrkpwN1iwmHRXal/xy0Bgrn35vGZxdPzLKJHX5OZIyiccoOVidEPvl1cRLQiyx5ftZysak9OrNtau+D5ukdVFgq+vh6+V58fePjLuP8BN6goHeyRHg6DH8JEXgt6orcyerb6x375tuXmtrK7V7xUs2uzsvXhgPdcgRYXHkvoMPXpi/wSOngYZuvVLgam7gMhwo9YEaAW5Rh17X7BWhBfx0J1Gq1H7RLRYnhp4a2NehTakV3FlZZxL8Qfp9J0hv5MiClvpc0AKByFjDZbJU93wOFQsLAKkV/BwxkqV21GYB25t8PSai4o/fFXMHZrBqJGRR3NIwlWx4nWfMWvg/u2fy1qwgDRbmgFJfXENBVOSsaq+9mhz8q69UsjjHhZf+x9zZMyAyX8IaEnhFzsml6ra5STcdW2TFlFCjp1eLs1YchOzEs8IDmBjx2HkJhYSso16kMy7lbi0O86ghN249qotVamyKgRt0lhPNj9R01QIgA3iFr+156PwS6rqVXhDScy0gg4+ABe5MkFhZhVUwAs9CObEbYrQFzjAL79HVVknRFLj0u0/w+g3rkEFiQnp70UDd8QIFDUaZxD2Xeh/kI3WanYvUtbWaW4IzPEo8v0IMHHDVuJMtQEdf/jyvPK+M9dwM=
     file: spotify-dbus-bridge-$TRAVIS_TAG-$TARGET.tar.gz
     skip_cleanup: true
     on:
+      repo: shurizzle/rust-macos-spotify-dbus-bridge
       branch: master
       tags: true
 
 matrix:
   include:
-
   - name: macOS Binary
     env: MACOSX_DEPLOYMENT_TARGET=10.7 TARGET=x86_64-apple-darwin
     os: osx
     addons:
       homebrew:
         packages:
-          - dbus
+        - dbus
         update: true
     rust: nightly
     script: cargo build --release --target $TARGET --locked
     install: true
-    <<: *DEPLOY_TO_GITHUB
-
+    before_deploy: *1
+    deploy: *2
 notifications:
   email:
     on_success: never
