@@ -182,15 +182,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "macos-spotify-dbus-bridge"
-version = "0.1.0"
-dependencies = [
- "dbus 0.6.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "macos-open 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "macos-spotify 0.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "matches"
 version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -230,6 +221,15 @@ dependencies = [
 name = "smallvec"
 version = "0.6.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "spotify-dbus-bridge"
+version = "0.1.0"
+dependencies = [
+ "dbus 0.6.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "macos-open 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "macos-spotify 0.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "syn"
