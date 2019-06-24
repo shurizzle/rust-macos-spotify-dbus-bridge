@@ -27,6 +27,11 @@ matrix:
   - name: macOS Binary
     env: MACOSX_DEPLOYMENT_TARGET=10.7 TARGET=x86_64-apple-darwin
     os: osx
+    addons:
+      homebrew:
+        packages:
+          - dbus
+        update: true
     rust: nightly
     script: cargo build --release --target $TARGET --locked
     install: true
