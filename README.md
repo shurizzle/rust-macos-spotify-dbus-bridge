@@ -1,1 +1,1 @@
-## Apple Events to DBus bridge for Spotify
+## Apple Events to DBus bridge for Spotify [![Build Status](https://travis-ci.com/shurizzle/rust-macos-spotify-dbus-bridge.svg?branch=master)](https://travis-ci.com/shurizzle/rust-macos-spotify-dbus-bridge)
